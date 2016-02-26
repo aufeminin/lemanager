@@ -1,3 +1,5 @@
 .idea
+.nbproject
+.project
 /vendor
 web/.well-known
