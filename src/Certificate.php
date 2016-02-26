@@ -2,7 +2,7 @@
 
 namespace App;
 
-require_once("_config.php");
+//require_once("_config.php");
 
 class Certificate {
 

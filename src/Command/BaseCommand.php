@@ -5,7 +5,7 @@
 
 namespace App\Command;
 
-require_once("_config.php");
+//require_once("_config.php");
 
 use Analogic\ACME\Lescript;
 use App\Certificate;
