@@ -15,7 +15,7 @@ class CertificateHandler
 
         foreach($san as $key => $domain) {
             if(empty($domain)) {
-                unset($san['key']);
+                unset($san[$key]);
                 continue;
             }
             if(!$this->validateDomain($domain)) {
