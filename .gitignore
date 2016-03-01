@@ -3,4 +3,5 @@
 .project
 .buildpath
 /vendor
-web/.well-known
+/web/.well-known
+config.php
