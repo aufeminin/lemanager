@@ -19,19 +19,29 @@ class CertificateSubscriber implements EventSubscriberInterface {
 	
 	public function onIssueSuccess(CertificateEvent $event)
 	{
-		$certificate = $event->getCertificate();
+ 		$certificate = $event->getCertificate();
 		$logger = $event->getLogger();
-		
+
 		$builder = new ProcessBuilder();
 		$builder->setPrefix('/bin/sh')
-				->setWorkingDirectory(DATA_DIR)
-				->setArguments(array(COPY_SCRIPT, $certificate->getName()));
+			->setWorkingDirectory(DATA_DIR)
+			->setArguments(array(COPY_SCRIPT, $certificate->getName()));
+
+		$process = $builder->getProcess();
+		$process->run();
+
+		if (!$process->isSuccessful()) {
+			$state = false;
+			$log = $process->getErrorOutput();
+		}
+		else {
+			$state = true;
+			$log = $process->getOutput();
+		}
 		
-		$builder->getProcess()->run();
+		$certificate->setInstallStatus($state);
+		$logger->info($log);
 		
-		$certificate->setInstallStatus($builder->getProcess()->isSuccessful());
-		
-		$logger->info($builder->getProcess()->getOutput());
 		
 	}
 	
@@ -59,9 +69,18 @@ class CertificateSubscriber implements EventSubscriberInterface {
 					->setWorkingDirectory(DATA_DIR)
 					->setArguments(array(RELOAD_SCRIPT, $certificate->getName()));
 				
-				$builder->getProcess()->run();
-			
-				$emailHandler->sendReloadLog($builder->getProcess()->getOutput());
+				
+				$process = $builder->getProcess();
+				$process->run();
+				
+				if (!$process->isSuccessful()) {
+					$log = $process->getErrorOutput();
+				}
+				else {
+					$log = $process->getOutput();
+				}
+				
+				$emailHandler->sendReloadLog($log);
 			}
 		}
 	}
