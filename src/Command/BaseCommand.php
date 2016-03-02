@@ -16,9 +16,21 @@ use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Yaml\Yaml;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 abstract class BaseCommand extends Command
 {
+	protected $dispatcher;
+	
+	public function __construct(EventDispatcherInterface $dispatcher) {
+		$this->dispatcher = $dispatcher;
+		parent::__construct();
+	}
+	
+	protected function getDispatcher() {
+		return $this->dispatcher;
+	}
+	
     protected function getLogger(Certificate $certificate)
     {
         $logPath = $certificate->getPath().'/last.log';

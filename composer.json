@@ -1,9 +1,17 @@
 {
+  "repositories": [
+      {
+        "type": "vcs",
+        "url": "git@github.com:aufeminin/lescript.git"
+      }
+  ],
   "require": {
     "monolog/monolog": "^1",
     "swiftmailer/swiftmailer": "5.x-dev",
     "symfony/console": "^3.0",
     "symfony/yaml": "^2.8",
+    "symfony/event-dispatcher": "^3.0",
+    "symfony/process": "^3.0",
     "aufeminin/lescript": "dev-master"
   },
   "autoload": {

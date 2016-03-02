@@ -5,6 +5,7 @@ namespace App\Command;
 use App\CertificateHandler;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use App\Event\RenewTerminatedEvent;
 
 class RenewAllCommand extends BaseCommand
 {
@@ -20,6 +21,8 @@ class RenewAllCommand extends BaseCommand
         $ch = new CertificateHandler();
         $ah = $this->getEmailAlertHandler();
 
+        $renewedCertificates = [];
+
         foreach($ch->getAll() as $certificate) {
 
             if(!$certificate->isExpiringOrInvalid()) {
@@ -32,6 +35,10 @@ class RenewAllCommand extends BaseCommand
             try {
                 $le->initAccount();
                 $le->signDomains($certificate->getAllDomains(), true);
+                $renewedCertificates[] = $certificate;
+                
+                $event = new CertificateEvent($certificate, $logger);
+                $this->dispatcher->dispatch('renew.success', $event);
 
                 $ah->sendRenewLog($certificate);
 
@@ -45,5 +52,8 @@ class RenewAllCommand extends BaseCommand
                 $ah->sendErrorLog($certificate);
             }
         }
+        
+        $event = new RenewTerminatedEvent($renewedCertificates, $ah);
+        $this->dispatcher->dispatch('renew.terminate', $event);
     }
 }

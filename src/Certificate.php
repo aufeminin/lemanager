@@ -7,10 +7,12 @@ namespace App;
 class Certificate {
 
     private $name;
+    private $installed;
 
     public function __construct($name)
     {
         $this->name = $name;
+        $this->installed = false;
     }
 
     public function getPath()
@@ -120,5 +122,13 @@ class Certificate {
             );
 
         return json_encode($details, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+    }
+    
+    public function setInstallStatus($status) {
+    	$this->installed = $status;
+    }
+    
+    public function isInstalled() {
+    	return $this->installed;
     }
 }

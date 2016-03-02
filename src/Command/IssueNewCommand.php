@@ -6,6 +6,7 @@ use App\CertificateHandler;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use App\Event\CertificateEvent;
 
 class IssueNewCommand extends BaseCommand
 {
@@ -37,6 +38,9 @@ class IssueNewCommand extends BaseCommand
             try {
                 $le->initAccount();
                 $le->signDomains($certificate->getAllDomains(), $input->getOption('reuse-csr'));
+                
+                $event = new CertificateEvent($certificate, $logger);
+                $this->dispatcher->dispatch('issue.success', $event);
 
                 $ah->sendIssuedLog($certificate);
 

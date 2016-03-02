@@ -56,6 +56,19 @@ class EmailAlertHandler
 
         return $this->email($subject, $body);
     }
+    
+    public function sendReloadLog($reloadLog)
+    {
+    
+    	$subject = "Service was reloaded";
+    	$body =
+    	"Hello,<br />\n".
+    	" good news everyone! Service was reloaded :<br />\n<br />\n".
+    	nl2br($reloadLog).
+    	$this->append;
+    
+    	return $this->email($subject, $body);
+    }
 
     public function sendTestMessage()
     {
