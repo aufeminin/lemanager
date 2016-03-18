@@ -6,6 +6,7 @@ use App\CertificateHandler;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use App\Event\RenewTerminatedEvent;
+use App\Event\CertificateEvent;
 
 class RenewAllCommand extends BaseCommand
 {
