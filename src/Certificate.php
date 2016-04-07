@@ -101,7 +101,7 @@ class Certificate {
 
         // LE certificates gets 90 days to expiry
 
-        return $interval->d < 15 || $interval->m < 2;
+        return $interval->days < 45;
     }
 
     public function isPending()
